@@ -1,17 +1,17 @@
-var mysql = require('mysql');
-var express = require('express');
-var session = require('express-session');
-var bodyParser = require('body-parser');
-var path = require('path');
+const mysql = require('mysql');
+const express = require('express');
+const session = require('express-session');
+const bodyParser = require('body-parser');
+const path = require('path');
 
-var connection = mysql.createConnection({
+const connection = mysql.createConnection({
 	host     : 'localhost',
 	user     : 'root',
 	password : '',
 	database : 'nodelogin'
 });
 
-var app = express();
+const app = express();
 app.use(session({
 	secret: 'secret',
 	resave: true,
