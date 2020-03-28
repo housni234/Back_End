@@ -1,8 +1,8 @@
-const mysql = require('mysql');
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-const path = require('path');
+const mysql = require("mysql");
+const express = require("express");
+const session = require("express-session");
+const bodyParser = require("body-parser");
+const path = require("path");
 
 const connection = mysql.createConnection({
 	host     : 'localhost',
@@ -28,7 +28,8 @@ app.post('/auth', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
 	if (username && password) {
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
+        connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], 
+        function(error, results, fields) {
 			if (results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
@@ -53,4 +54,6 @@ app.get('/home', function(request, response) {
 	response.end();
 });
 
-app.listen(3000);
+app.listen(3000, function() {
+    console.log("Server is listening on port 3000. Ready to accept requests!");
+});
