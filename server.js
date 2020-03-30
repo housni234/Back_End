@@ -19,9 +19,10 @@ app.use(session({
 }));
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
+app.use(express.static('../Front_End/public'))
 
 app.get('/', function(request, response) {
-	response.sendFile(path.join(__dirname + '/login.html'));
+	response.sendFile(path.join(__dirname + '/../Front_End/login.html'));
 });
 
 app.post('/auth', function(request, response) {
