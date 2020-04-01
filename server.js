@@ -28,11 +28,11 @@ app.get('/', function(request, response) {
 });
 
 app.post('/auth', function(request, response) {
-	var username = request.body.username;
-	var password = request.body.password;
+	const username = request.body.username;
+	const password = request.body.password;
 	if (username && password) {
 		pool.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
-			 if(results.rows.length > 0) {
+			 if(results.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.redirect('/home');
@@ -55,6 +55,11 @@ app.get('/home', function(request, response) {
 	}
 	response.end();
 });
+
+app.get('/logout', function (req, res) {
+	delete req.session.user_id;
+	res.redirect('/login');
+  });
 
 app.get("/users", (req, res) => {
 	pool
