@@ -31,8 +31,14 @@ app.post('/auth', function(request, response) {
 	const username = request.body.username;
 	const password = request.body.password;
 	if (username && password) {
-		pool.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
-			 if(results.length > 0) {
+		pool.query("SELECT * FROM accounts WHERE username = $1 AND password = $2", [username, password],
+		 function(error, results, fields)
+		  {
+			  console.log(error);
+			  console.log(results);
+			  console.log(fields);
+
+			 if(results.rowCount > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.redirect('/home');
