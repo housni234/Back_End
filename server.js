@@ -1,17 +1,19 @@
-const mysql = require('mysql');
+const { Pool } = require("pg");
 const express = require('express');
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const path = require('path');
-
-const connection = mysql.createConnection({
-	host     : 'localhost',
-	user     : 'root',
-	password : '',
-	database : 'nodelogin'
-});
-
+const secrets = require("./secrets.js");
 const app = express();
+
+const pool = new Pool({
+	user: "postgres",
+	host: "localhost",
+	database: "nodelogin",
+	password: secrets.dbPassword,
+	port: 5432
+  });
+
 app.use(session({
 	secret: 'secret',
 	resave: true,
@@ -29,8 +31,8 @@ app.post('/auth', function(request, response) {
 	var username = request.body.username;
 	var password = request.body.password;
 	if (username && password) {
-		connection.query('SELECT * FROM accounts WHERE username = ? AND password = ?', [username, password], function(error, results, fields) {
-			if (results.length > 0) {
+		pool.query("SELECT * FROM accounts WHERE username = ? AND password = ?", [username, password], function(error, results, fields) {
+			 if(results.rows.length > 0) {
 				request.session.loggedin = true;
 				request.session.username = username;
 				response.redirect('/home');
