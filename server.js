@@ -5,6 +5,8 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const secrets = require("./secrets.js");
 const app = express();
+var pg = require('pg');
+const db_connection = "postgres://postgres:Password@localhost/nodelogin";
 
 const pool = new Pool({
 	user: "postgres",
@@ -22,6 +24,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(express.static('../Front_End/public'))
+ 
 
 app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/../Front_End/login.html'));
@@ -111,10 +114,33 @@ app.get("/users", (req, res) => {
 	  .then(result => res.json(result.rows))
 	  .catch(err => res.json(err, 500));
   });
-  
-  
 
+  app.get('/url', function(req,res){
+    res.sendFile(path.join(__dirname + '/../Front_End/register.html'));
+});
+
+app.post('/url', function(req,res){
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const signup_client = new pg.Client(db_connection);;
+    signup_client.connect(function (err){
+    if(err){
+    console.log('Could not connect to postgresql on signup',err);
+    }else{
+    signup_client.query('INSERT INTO accounts(username,email,password) VALUES ($1,$2,$3)',
+    [username,email,password], function (err){
+    if(err){
+     console.log('Insert error in signup', err);
+    }else{
+     console.log('Signup Success');
+     res.redirect('/');
+     }
+    });
+     }
+    });
+});
+  
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
   });
-
