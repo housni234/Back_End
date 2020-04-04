@@ -97,14 +97,14 @@ app.post('/url', function(req,res){
 });
 });
 
-app.get("/requests", (req, res) => {
+app.get("/services", (req, res) => {
 	pool
-	  .query("SELECT * FROM requests")
+	  .query("SELECT * FROM services")
 	  .then(result => res.json(result.rows))
 	  .catch(err => res.json(err, 404));
   });
 
-  app.post("/requests", (req, res) => {
+  app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
     const newreceiverId = req.body.receiverId;
 	const newpoints = req.body.points;
@@ -116,7 +116,7 @@ app.get("/requests", (req, res) => {
 	const comment = req.body.comment;
 	
 	const query =
-	  "insert into requests (providerId,receiverId,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
+	  "insert into services (providerId,receiverId,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
 	const parameters = [newproviderId,newreceiverId, newpoints ,newcontent, state, start_date,end_date,review,comment ];
   
 	pool
