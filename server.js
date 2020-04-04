@@ -105,19 +105,19 @@ app.get("/requests", (req, res) => {
   });
 
   app.post("/requests", (req, res) => {
-	//const newproviderId = req.body.providerId;
-    //const newreceiverId = req.body.receiverId;
+	const newproviderId = req.body.providerId;
+    const newreceiverId = req.body.receiverId;
 	const newpoints = req.body.points;
 	const newcontent = req.body.content;
     const state= req.body.state
-	//const start_date = req.body.start_date;
-	//const end_date= req.body.end_date
-	//const review = req.body.start_review;
-	//const comment = req.body.comment;
+	const start_date = req.body.start_date;
+	const end_date= req.body.end_date
+	const review = req.body.review;
+	const comment = req.body.comment;
 	
 	const query =
-	  "insert into requests (points, content ,state) Values ($1,$2, $3)";
-	const parameters = [newpoints ,newcontent, state];
+	  "insert into requests (providerId,receiverId,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
+	const parameters = [newproviderId,newreceiverId, newpoints ,newcontent, state, start_date,end_date,review,comment ];
   
 	pool
 	  .query(query, parameters)
