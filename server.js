@@ -115,7 +115,7 @@ app.get("/users", (req, res) => {
   });
 
   app.get('/url', function(req,res){
-    res.sendFile(path.join(__dirname + '/../Front_End/register.html'));
+    res.sendFile(path.join(__dirname + '/../Front_End/login.html'));
 });
 
 app.post('/url', function(req,res){
@@ -138,7 +138,7 @@ app.post('/url', function(req,res){
 	 }
 	 pool
 	 .query(query, params)
-	 .then(() =>res.redirect('/'));
+	 .then(() =>res.redirect('/auth'));
 });
 });
   app.listen(3000, function() {
