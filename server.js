@@ -138,7 +138,7 @@ app.post('/url', function(req,res){
 	 }
 	 pool
 	 .query(query, params)
-	 .then(() =>res.redirect('/auth'));
+	 .then(() =>res.redirect('/'));
 });
 });
   app.listen(3000, function() {
