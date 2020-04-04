@@ -1,0 +1,41 @@
+{
+	"info": {
+		"_postman_id": "18ca50d3-1a71-48ab-b9f6-9b321f75445a",
+		"name": "migracode-get-search",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "get-search",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:3000/search?users=eduard,ward&hashtags=dogs,vacations,class,math",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"search"
+					],
+					"query": [
+						{
+							"key": "users",
+							"value": "eduard,ward",
+							"description": "The names of the users that are on the service. They can be the provider or the receiver."
+						},
+						{
+							"key": "hashtags",
+							"value": "dogs,vacations,class,math",
+							"description": "A list of words used to define the service. Can be any hashtag the user creates."
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}

@@ -104,6 +104,13 @@ app.get("/services", (req, res) => {
 	  .catch(err => res.json(err, 404));
   });
 
+  app.get("/services", (req, res) => {
+	pool
+	  .query("SELECT * FROM services")
+	  .then(result => res.json(result.rows))
+	  .catch(err => res.json(err, 404));
+  });
+
   app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
     const newreceiverId = req.body.receiverId;
@@ -114,8 +121,12 @@ app.get("/services", (req, res) => {
 	const end_date= req.body.end_date
 	const review = req.body.review;
 	const comment = req.body.comment;
-	
-	const query =
+	pool.query("SELECT * FROM services WHERE content = $1", [newcontent])
+	    .then(result => {
+	      if (result.rows.length < 150) {
+	    	return res.status(400)
+				      .send("an invalid request");
+		    }else{ const query =
 	  "insert into services (providerId,receiverId,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
 	const parameters = [newproviderId,newreceiverId, newpoints ,newcontent, state, start_date,end_date,review,comment ];
   
@@ -123,7 +134,9 @@ app.get("/services", (req, res) => {
 	  .query(query, parameters)
 	  .then(result => res.send("request created!"))
 	  .catch(err => res.json(err, 500));
+			}
   });
+});
 
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
