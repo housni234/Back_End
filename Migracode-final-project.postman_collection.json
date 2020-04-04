@@ -1,0 +1,68 @@
+{
+	"info": {
+		"_postman_id": "d158b32b-1c25-4689-a9c5-7cf86f55ccae",
+		"name": "Migracode-final-project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "post-service",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"points\": 10,\n\t\"content\": \"I leave for #vacations, can someone take care of my #dog?\",\n\t\"state\": \"waiting-for-a-provider\",\n\t\"startDate\":\"2018-03-29T13:34:00.000\",\n\t\"endDate\":\"2018-03-29T17:00:00.000\",\n\t\"receiverId\":1,\n\t\"providerId\":2,\n\t\"review\": 5,\n\t\"comment\": \"I love it :) !!! I really recommend Rahaf as a software developer!!!!! :D\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/requests",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"requests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get services",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"username\": \"laura\",\n\t\"password\":\"12345689\",\n\t\"email\":\"lolo@mail.com\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:3000/services",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"services"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"protocolProfileBehavior": {}
+}
