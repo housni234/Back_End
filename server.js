@@ -69,51 +69,6 @@ app.get('/logout', function (req, res) {
 	res.redirect('/login');
   });
 
-app.get("/users", (req, res) => {
-	pool
-	  .query("SELECT * FROM users")
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.json(err, 404));
-  });
-
-  app.post("/users", (req, res) => {
-	const name = req.body.username;
-	const email = req.body.email;
-  
-	const query =
-	  "INSERT INTO users(username, email) VALUES ($1, $2)";
-	const parameters = [name,email];
-  
-	pool
-	  .query(query, parameters)
-	  .then(result => res.send("user created!"))
-	  .catch(err => res.json(err, 500));
-  });
-
-  app.put("/users/:userId", (req, res) => {
-	const userId = req.params.userId;
-	const name = req.body.username;
-	const email = req.body.email;
-  
-	const query =
-	  "UPDATE users SET username=$1, email=$2 where id = $3";
-	const parameters = [name,email, userId];
-  
-	pool
-	  .query(query, parameters)
-	  .then(result => res.send("user updated!"))
-	  .catch(err => res.json(err, 500));
-  });
-  
-  app.get("/userss/:userId", (req, res) => {
-	const userId = req.params.userId;
-  
-	pool
-	  .query("SELECT * from userss where id = $1", [userId])
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.json(err, 500));
-  });
-
   app.get('/url', function(req,res){
     res.sendFile(path.join(__dirname + '/../Front_End/login.html'));
 });
@@ -141,6 +96,35 @@ app.post('/url', function(req,res){
 	 .then(() =>res.redirect('/'));
 });
 });
+
+app.get("/requests", (req, res) => {
+	pool
+	  .query("SELECT * FROM requests")
+	  .then(result => res.json(result.rows))
+	  .catch(err => res.json(err, 404));
+  });
+
+  app.post("/requests", (req, res) => {
+	//const newproviderId = req.body.providerId;
+    //const newreceiverId = req.body.receiverId;
+	const newpoints = req.body.points;
+	const newcontent = req.body.content;
+    const state= req.body.state
+	//const start_date = req.body.start_date;
+	//const end_date= req.body.end_date
+	//const review = req.body.start_review;
+	//const comment = req.body.comment;
+	
+	const query =
+	  "insert into requests (points, content ,state) Values ($1,$2, $3)";
+	const parameters = [newpoints ,newcontent, state];
+  
+	pool
+	  .query(query, parameters)
+	  .then(result => res.send("request created!"))
+	  .catch(err => res.json(err, 500));
+  });
+
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
   });
