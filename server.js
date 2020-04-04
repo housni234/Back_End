@@ -138,6 +138,30 @@ app.get("/services", (req, res) => {
   });
 });
 
+app.get("/users/:userId", (req, res) => {
+	const userId = req.params.userId;
+  
+	pool
+	  .query("SELECT * from users where id = $1", [userId])
+	  .then(result => res.json(result.rows))
+	  .catch(err => res.json(err, 500));
+  });
+  
+  app.get("/hashtags", function(req, res) {
+	const hashtagNameQuery = req.query.text
+  
+	let query = "SELECT * FROM hashtags "
+  
+	if (hashtagNameQuery) {
+	  query = `SELECT * FROM hashtags WHERE text ilike '%${hashtagNameQuery}%' ORDER BY name `
+	}
+  
+	pool
+	  .query(query)
+	  .then(result => res.json(result.rows))
+	  .catch(err => res.status(500).send(error)); 
+  }); 
+
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
   });
