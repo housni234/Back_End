@@ -97,13 +97,6 @@ app.post('/url', function(req,res){
 });
 });
 
-app.get("/services", (req, res) => {
-	pool
-	  .query("SELECT * FROM services")
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.json(err, 404));
-  });
-
   app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
     const newreceiverId = req.body.receiverId;
@@ -132,15 +125,18 @@ app.get("/services", (req, res) => {
 });
 
   app.get("/services", (req, res) => {
+	const receiverId = req.body.receiverId;
+	const providerId = req.body.providerId;
+	const text = req.body.text; 
 	let query =
-	  "SELECT services.*, text from services join service_tags on service_tags.service_id = services.id join hashtags on hashtag_id=service_tags.id where receiverid=$1 or Providerid = $2 or text = $3";
+	  "SELECT services.*, nick_name ,text from services join users on users.id=services.receiverid and users.id=services.providerid join service_tags on service_tags.service_id = services.id join hashtags on hashtag_id=service_tags.id where receiverid=$1 or Providerid = $2 or text = $3";
 
 	let params = [receiverId, providerId, text];
 
 	pool
 	  .query(query, params)
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.json(err, 500));
+	  .then(result => res.send("results shown"))
+	  .catch(e => res.status(500).send(e));
   });
 
   app.listen(3000, function() {
