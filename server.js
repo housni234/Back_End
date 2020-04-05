@@ -104,13 +104,6 @@ app.get("/services", (req, res) => {
 	  .catch(err => res.json(err, 404));
   });
 
-  app.get("/services", (req, res) => {
-	pool
-	  .query("SELECT * FROM services")
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.json(err, 404));
-  });
-
   app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
     const newreceiverId = req.body.receiverId;
@@ -138,29 +131,17 @@ app.get("/services", (req, res) => {
   });
 });
 
-app.get("/users/:userId", (req, res) => {
-	const userId = req.params.userId;
-  
+  app.get("/services", (req, res) => {
+	let query =
+	  "SELECT services.*, text from services join service_tags on service_tags.service_id = services.id join hashtags on hashtag_id=service_tags.id where receiverid=$1 or Providerid = $2 or text = $3";
+
+	let params = [receiverId, providerId, text];
+
 	pool
-	  .query("SELECT * from users where id = $1", [userId])
+	  .query(query, params)
 	  .then(result => res.json(result.rows))
 	  .catch(err => res.json(err, 500));
   });
-  
-  app.get("/hashtags", function(req, res) {
-	const hashtagNameQuery = req.query.text
-  
-	let query = "SELECT * FROM hashtags "
-  
-	if (hashtagNameQuery) {
-	  query = `SELECT * FROM hashtags WHERE text ilike '%${hashtagNameQuery}%' ORDER BY name `
-	}
-  
-	pool
-	  .query(query)
-	  .then(result => res.json(result.rows))
-	  .catch(err => res.status(500).send(error)); 
-  }); 
 
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
