@@ -5,7 +5,6 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const secrets = require("./secrets.js");
 const app = express();
-const pg = require('pg');
 
 const pool = new Pool({
 	user: "postgres",
@@ -124,20 +123,30 @@ app.post('/url', function(req,res){
   });
 });
 
+
+
   app.get("/services", (req, res) => {
-	const receiverId = req.body.receiverId;
-	const providerId = req.body.providerId;
-	const text = req.body.text; 
-	let query =
-	  "SELECT services.*, nick_name ,text from services join users on users.id=services.receiverid and users.id=services.providerid join service_tags on service_tags.service_id = services.id join hashtags on hashtag_id=service_tags.id where receiverid=$1 or Providerid = $2 or text = $3";
+	const text = req.query.text;
 
-	let params = [receiverId, providerId, text];
+	 let query = "SELECT s.*, h.text from services  s "+
+	 "join users u on u.id=s.providerid "+
+	 "join service_tags  t on t.service_id = s.id "+
+	 "join hashtags h on h.id=t.hashtag_id "
 
+	  let params = [];
+
+	  if (text) {
+		params = [`%${text}%`];
+		query += ` where h.text ilike $1`;
+	}
+	
 	pool
-	  .query(query, params)
-	  .then(result => res.send("results shown"))
-	  .catch(e => res.status(500).send(e));
-  });
+    .query(query, params)
+    .then(result => res.json(result.rows))
+    .catch(err => res.json(err, 500));
+
+});
+  
 
   app.listen(3000, function() {
 	console.log("Server is listening on port 3000. Ready to accept requests!");
