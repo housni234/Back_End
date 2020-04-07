@@ -96,6 +96,28 @@ app.post('/url', function(req,res){
 });
 });
 
+app.get("/services", (req, res) => {
+	const text = req.query.text;
+
+	 let query = "SELECT s.*, h.text from services  s "+
+	 "join users u on u.id=s.providerid "+
+	 "join service_tags  t on t.service_id = s.id "+
+	 "join hashtags h on h.id=t.hashtag_id "
+
+	  let params = [];
+
+	  if (text) {
+		params = [`%${text}%`];
+		query += ` where h.text ilike $1`;
+	}
+	
+	pool
+    .query(query, params)
+    .then(result => res.json(result.rows))
+    .catch(err => res.json(err, 500));
+
+});
+
   app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
     const newreceiverId = req.body.receiverId;
@@ -125,27 +147,7 @@ app.post('/url', function(req,res){
 
 
 
-  app.get("/services", (req, res) => {
-	const text = req.query.text;
-
-	 let query = "SELECT s.*, h.text from services  s "+
-	 "join users u on u.id=s.providerid "+
-	 "join service_tags  t on t.service_id = s.id "+
-	 "join hashtags h on h.id=t.hashtag_id "
-
-	  let params = [];
-
-	  if (text) {
-		params = [`%${text}%`];
-		query += ` where h.text ilike $1`;
-	}
-	
-	pool
-    .query(query, params)
-    .then(result => res.json(result.rows))
-    .catch(err => res.json(err, 500));
-
-});
+  
   
 
   app.listen(3000, function() {
