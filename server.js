@@ -68,11 +68,11 @@ app.get('/logout', function (req, res) {
 	res.redirect('/login');
   });
 
-  app.get('/url', function(req,res){
+  app.get('/reg', function(req,res){
     res.sendFile(path.join(__dirname + '/../Front_End/login.html'));
 });
 
-app.post('/url', function(req,res){
+app.post('/reg', function(req,res){
     const username= req.body.username;
     const email = req.body.email;
 	const password = req.body.password;
@@ -96,8 +96,10 @@ app.post('/url', function(req,res){
 });
 });
 
-app.get("/services", (req, res) => {
+/*app.get("/services", (req, res) => {
 	const text = req.query.text;
+	let words = text.split('')
+
 
 	 let query = "SELECT s.*, h.text from services  s "+
 	 "join users u on u.id=s.providerid "+
@@ -110,13 +112,59 @@ app.get("/services", (req, res) => {
 		params = [`%${text}%`];
 		query += ` where h.text ilike $1`;
 	}
-	
 	pool
     .query(query, params)
     .then(result => res.json(result.rows))
     .catch(err => res.json(err, 500));
 
-});
+});*/
+
+	app.get('/services', function (request, response) {
+		const text = request.query.text;
+		// text = u:eduard h:dogs h:vacations u:ward u:housni
+		// 1 - separate each word and put it in an array
+		var words = text.split(' '); // words = ['u:eduard' 'h:dogs' 'h:vacations' 'u:ward' 'u:housni']
+
+		// 2 - determine which ones are hastags and which ones are user names
+		var hashtags = words // hashtags = ['dogs' 'vacations']
+			.filter((word, index) => word.startsWith('h:'))
+			.map(word => word.replace('h:',''));
+		var users = words // users = ['eduard' 'ward' 'housni'] 
+			.filter((word, index) => word.startsWith('u:'))
+			.map(word => word.replace('u:', ''));
+		// 3 - put them in our query
+		// SELECT + JOIN
+
+		var query = `SELECT s.*, pro.nick_name as pro from services s
+		join users pro on pro.id=s.providerid 
+		join service_tags  t on t.service_id = s.id 
+		join hashtags h on h.id=t.hashtag_id 
+	union 
+	SELECT s.*, rec.nick_name as rec from services s
+		join users rec on rec.id=s.receiverid
+		join service_tags  t on t.service_id = s.id 
+		join hashtags h on h.id=t.hashtag_id `;
+		console.log(query);
+
+		//const hashtagPlaceholders = hashtags.map ((h, index) => `$${index + 1}`).join(',')
+		function hashtagPlaceholders(hashtag) {
+			return `(${hashtags.map((h, i) => `$${i + 1}`).join(",")})`;}
+	
+		 const offset = hashtags.length;
+		 function userPlaceholders(users, offset = 0) {
+			return `(${users.map((users, i) => `$${i+1+offset}`).join(",")})`;}
+		 //const userPlaceholders = users.map((u,i) => `$${i+1+offset}`).join(",");
+
+		 let quyry =` WHERE h.text = ${hashtagPlaceholders(hashtags)} 
+		AND pro.nickname = ${userPlaceholders(users, offset)} `
+
+		pool
+    .query(query)
+    .then(result => response.json(result.rows))
+	.catch(err => response.status(500).json(err));
+
+	});
+	
 
   app.post("/services", (req, res) => {
 	const newproviderId = req.body.providerId;
