@@ -5,6 +5,7 @@ const bodyParser = require('body-parser');
 const path = require('path');
 const secrets = require("./secrets.js");
 const app = express();
+const cors = require('cors');
 
 const pool = new Pool({
 	user: "postgres",
@@ -22,7 +23,7 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(express.static('../Front_End/public'))
- 
+app.use(cors());
 
 app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/../Front_End/login.html'));
