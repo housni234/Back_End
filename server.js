@@ -23,7 +23,10 @@ app.use(session({
 app.use(bodyParser.urlencoded({extended : true}));
 app.use(bodyParser.json());
 app.use(express.static('../Front_End/public'))
-app.use(cors());
+
+
+app.use(cors())
+
 
 app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/../Front_End/login.html'));
@@ -128,8 +131,8 @@ app.post('/reg', function(req,res){
 
 		// 2 - determine which ones are hastags and which ones are user names
 		var hashtags = words // hashtags = ['dogs' 'vacations']
-			.filter((word, index) => word.startsWith('h:'))
-			.map(word => word.replace('h:',''));
+			.filter((word, index) => word.startsWith(''))
+			.map(word => word.replace('h:',''));h:
 		var users = words // users = ['eduard' 'ward' 'housni'] 
 			.filter((word, index) => word.startsWith('u:'))
 			.map(word => word.replace('u:', ''));
@@ -145,7 +148,7 @@ app.post('/reg', function(req,res){
 		join users rec on rec.id=s.receiverid
 		join service_tags  t on t.service_id = s.id 
 		join hashtags h on h.id=t.hashtag_id `;
-		console.log(query);
+		
 
 		//const hashtagPlaceholders = hashtags.map ((h, index) => `$${index + 1}`).join(',')
 		function hashtagPlaceholders(hashtag) {
@@ -194,6 +197,6 @@ app.post('/reg', function(req,res){
   });
 });
 
-  app.listen(3000, function() {
-	console.log("Server is listening on port 3000. Ready to accept requests!");
+  app.listen(5000, function() {
+	console.log("Server is listening on port 5000. Ready to accept requests!");
   });
