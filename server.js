@@ -10,7 +10,7 @@ const cors = require('cors');
 const pool = new Pool({
 	user: "postgres",
 	host: "localhost",
-	database: "nodelogin",
+	database: "migracode-final-project",
 	password: secrets.dbPassword,
 	port: 5432
   });
@@ -139,13 +139,13 @@ app.post('/reg', function(req,res){
 		// 3 - put them in our query
 		// SELECT + JOIN
 
-		var query = `SELECT s.*, pro.nick_name as pro from services s
-		join users pro on pro.id=s.providerid 
+		var query = `SELECT s.*, pro.name as pro from services s
+		join users pro on pro.id=s.provider_id 
 		join service_tags  t on t.service_id = s.id 
 		join hashtags h on h.id=t.hashtag_id 
 	union 
-	SELECT s.*, rec.nick_name as rec from services s
-		join users rec on rec.id=s.receiverid
+	SELECT s.*, rec.name as rec from services s
+		join users rec on rec.id=s.receiver_id
 		join service_tags  t on t.service_id = s.id 
 		join hashtags h on h.id=t.hashtag_id `;
 		
@@ -171,11 +171,11 @@ app.post('/reg', function(req,res){
 	
 
   app.post("/services", (req, res) => {
-	const newproviderId = req.body.providerId;
-    const newreceiverId = req.body.receiverId;
+	const newproviderId = req.body.provider_id;
+    const newreceiverId = req.body.receiver_id;
 	const newpoints = req.body.points;
 	const newcontent = req.body.content;
-    const state= req.body.state
+    const state= req.body.state;
 	const start_date = req.body.start_date;
 	const end_date= req.body.end_date
 	const review = req.body.review;
@@ -186,7 +186,7 @@ app.post('/reg', function(req,res){
 	    	return res.status(400)
 				      .send("an invalid request");
 		    }else{ const query =
-	  "insert into services (providerId,receiverId,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
+	  "insert into services (provider_id,receiver_id,points, content ,state,start_date,end_date,review,comment) Values ($1,$2, $3,$4,$5,$6,$7,$8,$9 )";
 	const parameters = [newproviderId,newreceiverId, newpoints ,newcontent, state, start_date,end_date,review,comment ];
   
 	pool

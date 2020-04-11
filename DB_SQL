@@ -1,0 +1,43 @@
+CREATE TABLE IF NOT EXISTS accounts (
+  id SERIAL primary key,
+  username varchar(50) NOT NULL,
+  password varchar(255) NOT NULL,
+  email varchar(100) NOT NULL
+) ;
+INSERT INTO accounts (username, password, email) VALUES ('rahaf', '123456', 'rahaf@mail.com');
+____________________________________________________________________________________________________________
+
+CREATE TABLE IF NOT EXISTS services (
+id serial primary key,
+provider_id   int,
+receiver_id   int,
+points       int,
+content   varchar,
+state         varchar,
+start_date   timestamp,
+end_date     timestamp,
+review         int,
+comment        varchar
+);
+
+CREATE TABLE "users" (
+  "id" SERIAL PRIMARY KEY,
+  "name" varchar UNIQUE,
+  "email" varchar UNIQUE,
+  "points" int,
+  "average_rating" decimal
+);
+CREATE TABLE "service_tags" (
+  "id" SERIAL PRIMARY KEY,
+  "service_id" int,
+  "hashtag_id" int
+);
+CREATE TABLE "hashtags" (
+  "id" SERIAL PRIMARY KEY,
+  "text" varchar UNIQUE
+);
+
+ALTER TABLE "serviceTags" ADD FOREIGN KEY ("serviceId") REFERENCES "services" ("id");
+ALTER TABLE "serviceTags" ADD FOREIGN KEY ("hashtagId") REFERENCES "hashtags" ("id");
+ALTER TABLE "services" ADD FOREIGN KEY ("receiverId") REFERENCES "users" ("id");
+ALTER TABLE "services" ADD FOREIGN KEY ("providerId") REFERENCES "users" ("id");
