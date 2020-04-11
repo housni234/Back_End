@@ -139,12 +139,12 @@ app.post('/reg', function(req,res){
 		// 3 - put them in our query
 		// SELECT + JOIN
 
-		var query = `SELECT s.*, pro.name as pro from services s
+		var query = `SELECT s.*, h.text, pro.name as pro from services s
 		join users pro on pro.id=s.provider_id 
 		join service_tags  t on t.service_id = s.id 
 		join hashtags h on h.id=t.hashtag_id 
 	union 
-	SELECT s.*, rec.name as rec from services s
+	SELECT s.*, h.text, rec.name as rec from services s
 		join users rec on rec.id=s.receiver_id
 		join service_tags  t on t.service_id = s.id 
 		join hashtags h on h.id=t.hashtag_id `;
@@ -160,7 +160,7 @@ app.post('/reg', function(req,res){
 		 //const userPlaceholders = users.map((u,i) => `$${i+1+offset}`).join(",");
 
 		 let quyry =` WHERE h.text = ${hashtagPlaceholders(hashtags)} 
-		AND pro.nickname = ${userPlaceholders(users, offset)} `
+		or pro.name = ${userPlaceholders(users, offset)} `
 
 		pool
     .query(query)
