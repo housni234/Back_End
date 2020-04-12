@@ -31,10 +31,10 @@ CREATE TABLE hashtags (
   "text" varchar UNIQUE
 );
 
-ALTER TABLE "serviceTags" ADD FOREIGN KEY ("serviceId") REFERENCES "services" ("id");
-ALTER TABLE "serviceTags" ADD FOREIGN KEY ("hashtagId") REFERENCES "hashtags" ("id");
-ALTER TABLE "services" ADD FOREIGN KEY ("receiverId") REFERENCES "users" ("id");
-ALTER TABLE "services" ADD FOREIGN KEY ("providerId") REFERENCES "users" ("id");
+ALTER TABLE "service_tags" ADD FOREIGN KEY ("service_id") REFERENCES "services" ("id");
+ALTER TABLE "service_tags" ADD FOREIGN KEY ("hashtag_id") REFERENCES "hashtags" ("id");
+ALTER TABLE "services" ADD FOREIGN KEY ("receiver_id") REFERENCES "users" ("id");
+ALTER TABLE "services" ADD FOREIGN KEY ("provider_id") REFERENCES "users" ("id");
 
 ____________________________________________________________________________________________________________
 
