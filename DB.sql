@@ -1,11 +1,3 @@
-CREATE TABLE IF NOT EXISTS accounts (
-  id SERIAL primary key,
-  username varchar(50) NOT NULL,
-  password varchar(255) NOT NULL,
-  email varchar(100) NOT NULL
-) ;
-INSERT INTO accounts (username, password, email) VALUES ('rahaf', '123456', 'rahaf@mail.com');
-____________________________________________________________________________________________________________
 
 CREATE TABLE IF NOT EXISTS services (
 id serial primary key,
@@ -54,6 +46,8 @@ INSERT INTO users (name, email, points, average_rating, password) VALUES
 ('eduard', 'eduard@gmail.com', 52, 5, 0123456789);
 INSERT INTO users (name, email, points, average_rating, password) VALUES
 ('rahaf', 'rahaf@gmail.com', 32, 3.5, 'rahaf89');
+
+
 INSERT INTO hashtags (text) VALUES
 ('cats');
 INSERT INTO hashtags (text) VALUES
@@ -68,6 +62,8 @@ INSERT INTO hashtags (text) VALUES
 ('english');
 INSERT INTO hashtags (text) VALUES
 ('painting');
+
+
 INSERT INTO services 
 (content,points, receiver_id, provider_id, 
  state, start_date, end_date, review, comment) 
@@ -88,6 +84,8 @@ INSERT INTO services
  state, start_date, end_date, review, comment) 
  VALUES
 ('I need someone for h:painting my h:house ', 50, 3, 2, 'accepted', '2016-06-23 18:10:25-07','2016-06-23 19:15:25-07', 1, '');
+
+
 insert into service_tags (service_id, hashtag_id) Values (1, 2);
 insert into service_tags (service_id, hashtag_id) Values (1, 3);
 insert into service_tags (service_id, hashtag_id) Values (4, 4);
