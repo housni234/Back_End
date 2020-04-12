@@ -32,11 +32,18 @@ app.get('/', function(request, response) {
 	response.sendFile(path.join(__dirname + '/../Front_End/login.html'));
 });
 
-app.post('/auth', function(request, response) {
-	const username = request.body.username;
+app.get("/users", (req, res) => {
+	pool
+	  .query("SELECT * FROM users")
+	  .then(result => res.json(result.rows))
+	  .catch(err => res.json(err, 404));
+  });
+
+app.post('/users', function(request, response) {
+	const username = request.body.name;
 	const password = request.body.password;
 	if (username && password) {
-		pool.query("SELECT * FROM accounts WHERE username = $1 AND password = $2", [username, password],
+		pool.query("SELECT * FROM users WHERE name = $1 AND password = $2", [username, password],
 		 function(error, results, fields)
 		  {
 			  console.log(error);
@@ -77,16 +84,16 @@ app.get('/logout', function (req, res) {
 });
 
 app.post('/reg', function(req,res){
-    const username= req.body.username;
+    const username= req.body.name;
     const email = req.body.email;
 	const password = req.body.password;
 
-	pool.query("SELECT * FROM accounts WHERE email = $1", [email])
+	pool.query("SELECT * FROM users WHERE email = $1", [email])
 	    .then(result => {
 	      if (result.rows.length > 0) {
 	    	return res.status(400)
 				      .send("A user with the same email already exists!");
-		    }else{ const query = "INSERT INTO accounts (username,email,password) VALUES ($1,$2,$3)" ;
+		    }else{ const query = "INSERT INTO users (name,email,password) VALUES ($1,$2,$3)" ;
 			       const params = [username,email,password];
 	pool
 	.query(query, params)
